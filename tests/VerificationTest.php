@@ -21,6 +21,12 @@ use Illuminate\Support\Facades\Redis;
 class VerificationTest extends TestCase
 {
 
+    private function queueClear($key){
+        for($i = 0; $i < 1000; $i++){
+            Redis::lpop($key);
+        }
+    }
+
     private function generateIdentity(bool $email = true) : string
     {
         if($email){
@@ -74,6 +80,7 @@ class VerificationTest extends TestCase
 
     public function test_create_new_event()
     {
+        $this->queueClear(VerificationEvent::EVENT_VERIFICATION_CREATED);
         $verification = new Verification();
         $verification->createNew([
             'identity' => $this->generateIdentity(),
@@ -143,6 +150,7 @@ class VerificationTest extends TestCase
 
     public function test_confirmation_failed_event()
     {
+        $this->queueClear(VerificationEvent::EVENT_VERIFICATION_CONFIRMATION_FAILED);
         $this->expectException(NoPermissionToConfirmException::class);
         $verification = new Verification();
         $verification->init([
@@ -166,6 +174,7 @@ class VerificationTest extends TestCase
 
     public function test_confirm_success()
     {
+        $this->queueClear(VerificationEvent::EVENT_VERIFICATION_CONFIRMED);
         $verification = new Verification();
         $verification->init([
             'id' => 'asdasd4',

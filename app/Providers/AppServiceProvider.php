@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\templates\repositories\ITemplateRepository;
+use App\templates\repositories\TemplateRepository;
+use App\templates\services\ITemplateService;
+use App\templates\services\TemplateService;
 use App\verification\repositories\IVerificationRepository;
 use App\verification\repositories\VerificationRepository;
 use App\verification\services\IVerificationService;
@@ -22,6 +26,12 @@ class AppServiceProvider extends ServiceProvider
         });
         $this->app->singleton(IVerificationService::class, function () {
             return new VerificationService(new VerificationRepository());
+        });
+        $this->app->singleton(ITemplateRepository::class, function () {
+            return new TemplateRepository();
+        });
+        $this->app->singleton(ITemplateService::class, function () {
+            return new TemplateService(new TemplateRepository());
         });
     }
 }

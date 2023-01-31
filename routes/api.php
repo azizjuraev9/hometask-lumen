@@ -12,11 +12,8 @@
 |
 */
 
-use App\Http\Controllers\VerificationController;
-
-$router->get('/', function () use ($router) {
-//    phpinfo();
-});
-
 $router->post('verifications', 'VerificationController@create');
 $router->put('verifications/{id}/confirm', 'VerificationController@confirm');
+
+
+$router->post('templates/render', 'TemplateController@render');
