@@ -1,0 +1,64 @@
+version: '3.7'
+
+networks:
+  common:
+    driver: bridge
+
+volumes:
+  postgres:
+    driver: local
+
+services:
+  php:
+    restart: always
+    build: ./docker/php
+    command: php -S 0.0.0.0:8000 -t public
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    ports:
+      - "8000:8000"
+    networks:
+      - common
+    depends_on:
+      postgres:
+        condition: service_started
+      composer:
+        condition: service_completed_successfully
+
+  composer:
+    restart: on-failure
+    image: composer
+    command: composer install
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    networks:
+      - common
+
+  postgres:
+    restart: always
+    build:
+      context: ./docker/postgres
+      args:
+        DB_PORT: ${DB_PORT}
+        DB_DATABASE: ${DB_DATABASE}
+    volumes:
+      - postgres:/var/lib/postgresql/data
+      - ./docker/postgres/config:/etc/postgres
+    command: postgres -c config_file=/etc/postgres/postgresql.conf
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+      - 127.0.0.1:${DB_PORT}:${DB_PORT}
+    networks:
+      - common
+
+  redis:
+    restart: always
+    image: redis
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+    networks:
+      - common
