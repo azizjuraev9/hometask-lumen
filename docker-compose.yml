@@ -62,3 +62,26 @@ services:
       - ${REDIS_PORT}:${REDIS_PORT}
     networks:
       - common
+
+
+  gotify:
+    image: gotify/server
+    ports:
+      - 9191:80
+      - 9193:9193
+    environment:
+      - GOTIFY_DEFAULTUSER_NAME=${GOTIFY_USER}
+      - GOTIFY_DEFAULTUSER_PASS=${GOTIFY_PASS}
+    volumes:
+      - "./docker/gotify/data:/app/data"
+    networks:
+      - common
+
+
+  mailhog:
+    build: ./docker/mailhog
+    ports:
+      - 1025:1025
+      - 8025:8025
+    networks:
+      - common

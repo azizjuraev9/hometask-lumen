@@ -6,9 +6,12 @@
     "type": "project",
     "require": {
         "php": "^8.2",
+        "guzzlehttp/guzzle": "^7.5",
+        "illuminate/mail": "^9.49",
         "illuminate/redis": "^9.48",
         "laravel/lumen-framework": "^9.0",
-        "predis/predis": "^2.1"
+        "predis/predis": "^2.1",
+        "ext-json": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

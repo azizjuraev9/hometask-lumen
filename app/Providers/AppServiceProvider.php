@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\notification\repositories\INotificationRepository;
+use App\notification\repositories\NotificationRepository;
+use App\notification\services\INotificationService;
+use App\notification\services\NotificationService;
 use App\templates\repositories\ITemplateRepository;
 use App\templates\repositories\TemplateRepository;
 use App\templates\services\ITemplateService;
@@ -32,6 +36,12 @@ class AppServiceProvider extends ServiceProvider
         });
         $this->app->singleton(ITemplateService::class, function () {
             return new TemplateService(new TemplateRepository());
+        });
+        $this->app->singleton(INotificationRepository::class, function () {
+            return new NotificationRepository();
+        });
+        $this->app->singleton(INotificationService::class, function () {
+            return new NotificationService(new NotificationRepository());
         });
     }
 }
