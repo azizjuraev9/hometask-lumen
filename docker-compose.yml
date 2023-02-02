@@ -29,9 +29,10 @@ services:
         condition: service_completed_successfully
 
   notifications:
+    restart: always
     image: artisan:latest
     command:
-      - notification
+      - "notification"
     volumes:
       - ./:/var/www
     networks:
