@@ -2,8 +2,8 @@
 
 ## Setup instruction
 
-To set up application use command:
-``$ docker compose up``.
+1. Copy contents of `.env.example` to `.env` file
+2. Run: `$ docker-compose up`.
 
 After set up complete, application is running on http://localhost:8000. you can interact with it using 
 [available endpoints](#available-endpoints)
@@ -68,5 +68,3 @@ HTTP/1.1 204 No Content
 * verification-code is code that you receive from gotify or mailhog
 
 **Also, you can connect to postgresql or redis using credentials and ports in `.env` file**
-
-```

@@ -1,0 +1,2 @@
+/docker/postgres/init/init_db.sh  eol=lf
+/docker/php/init/run.sh  eol=lf
