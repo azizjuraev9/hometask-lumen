@@ -1,5 +1,6 @@
 /vendor
 /.idea
+/docker/gotify/data
 Homestead.json
 Homestead.yaml
 .env

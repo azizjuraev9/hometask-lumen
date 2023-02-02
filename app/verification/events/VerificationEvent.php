@@ -7,15 +7,12 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Redis;
 
-class VerificationEvent implements IVerificationEvent
+abstract class VerificationEvent implements IVerificationEvent
 {
 
-    const EVENT_VERIFICATION_CREATED = 'VerificationCreated';
-    const EVENT_VERIFICATION_CONFIRMED = 'VerificationConfirmed';
-    const EVENT_VERIFICATION_CONFIRMATION_FAILED = 'VerificationConfirmationFailed';
+    protected string $type;
 
     public function __construct(
-        private string $type,
         private string $id,
         private int    $code,
         private array  $subject,

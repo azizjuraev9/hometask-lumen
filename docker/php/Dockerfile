@@ -12,3 +12,7 @@ RUN apt-get update && \
 
 
 WORKDIR /var/www
+
+COPY ./init/run.sh /tmp
+ENTRYPOINT ["/tmp/run.sh"]
+

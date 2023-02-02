@@ -80,13 +80,13 @@ class VerificationTest extends TestCase
 
     public function test_create_new_event()
     {
-        $this->queueClear(VerificationEvent::EVENT_VERIFICATION_CREATED);
+        $this->queueClear('VerificationCreated');
         $verification = new Verification();
         $verification->createNew([
             'identity' => $this->generateIdentity(),
             'type' => 'email_confirmation',
         ], ['someData', 'someData']);
-        $queueData = Redis::lpop(VerificationEvent::EVENT_VERIFICATION_CREATED);
+        $queueData = Redis::lpop('VerificationCreated');
         $queueData = json_decode($queueData);
         $this->assertEquals($queueData->id, $verification->getId());
     }
@@ -150,7 +150,7 @@ class VerificationTest extends TestCase
 
     public function test_confirmation_failed_event()
     {
-        $this->queueClear(VerificationEvent::EVENT_VERIFICATION_CONFIRMATION_FAILED);
+        $this->queueClear('VerificationConfirmationFailed');
         $this->expectException(NoPermissionToConfirmException::class);
         $verification = new Verification();
         $verification->init([
@@ -167,14 +167,14 @@ class VerificationTest extends TestCase
         ]);
         $verification->confirmVerification(1111,['IP' => 'someData', 'agent' => 'otherData']);
 
-        $queueData = Redis::lpop(VerificationEvent::EVENT_VERIFICATION_CONFIRMATION_FAILED);
+        $queueData = Redis::lpop('VerificationConfirmationFailed');
         $queueData = json_decode($queueData);
         $this->assertEquals($queueData->id, $verification->getId());
     }
 
     public function test_confirm_success()
     {
-        $this->queueClear(VerificationEvent::EVENT_VERIFICATION_CONFIRMED);
+        $this->queueClear('VerificationConfirmed');
         $verification = new Verification();
         $verification->init([
             'id' => 'asdasd4',
@@ -191,7 +191,7 @@ class VerificationTest extends TestCase
         $verification->confirmVerification(1111,['IP' => 'someData', 'agent' => 'someData']);
 
 
-        $queueData = Redis::lpop(VerificationEvent::EVENT_VERIFICATION_CONFIRMED);
+        $queueData = Redis::lpop('VerificationConfirmed');
         $queueData = json_decode($queueData);
         $this->assertEquals($queueData->id, $verification->getId());
     }

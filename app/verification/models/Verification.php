@@ -2,6 +2,9 @@
 
 namespace App\verification\models;
 
+use App\verification\events\VerificationConfirmationFailed;
+use App\verification\events\VerificationConfirmed;
+use App\verification\events\VerificationCreated;
 use App\verification\events\VerificationEvent;
 use App\verification\exceptions\ExpiredException;
 use App\verification\exceptions\InvalidCodeException;
@@ -9,7 +12,7 @@ use App\verification\exceptions\NoPermissionToConfirmException;
 use App\verification\validators\SubjectValidator;
 
 
-class Verification implements IVerification
+class Verification
 {
 
     const MAX_ATTEMPTS = 5;
@@ -62,8 +65,7 @@ class Verification implements IVerification
         $this->userInfo = $userInfo;
         $this->attempts = 0;
 
-        (new VerificationEvent(
-            VerificationEvent::EVENT_VERIFICATION_CREATED,
+        (new VerificationCreated(
             $this->id,
             $this->code,
             $subjectData,
@@ -104,8 +106,7 @@ class Verification implements IVerification
 
         $this->confirmed = true;
 
-        (new VerificationEvent(
-            VerificationEvent::EVENT_VERIFICATION_CONFIRMED,
+        (new VerificationConfirmed(
             $this->id,
             $this->code,
             (array)$this->subject,
@@ -115,8 +116,7 @@ class Verification implements IVerification
 
     private function dispatchConfirmationFailedEvent()
     {
-        (new VerificationEvent(
-            VerificationEvent::EVENT_VERIFICATION_CONFIRMATION_FAILED,
+        (new VerificationConfirmationFailed(
             $this->id,
             $this->code,
             (array)$this->subject,
